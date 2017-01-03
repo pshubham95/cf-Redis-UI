@@ -2,7 +2,7 @@
 # README #
 
 Redis UI is a web-based administration tool for redis. It is compatible with predix and can be configured with a redis service instance running on Predix.
-
+Built using Node js - express and Predix UI
 ### Contents ###
 
 * Prerequisites
