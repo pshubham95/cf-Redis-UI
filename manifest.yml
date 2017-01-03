@@ -1,8 +1,8 @@
 ---
 applications:
-- name: predixredis_dev
-  memory: 256M
+- name: <your_application_name>
+  memory: <memory_allocation_for_app>
   instances: 1
   command: npm install && npm start
   services:
-  - predix_redis
+  - <your_redis_service_instance_name>
