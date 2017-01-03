@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<!-- define angular app -->
+<html ng-app = "predix_redis_login" >
+
+<head>
+  <script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+  <!-- SCROLLS -->
+    <link rel="stylesheet" href="stylesheets/style.css" />
+    <link rel="stylesheet" href="stylesheets/login.css" />
+    <link rel="stylesheet" href="stylesheets/layout.css" />
+    <link rel="stylesheet" href="stylesheets/buttons.css" />
+    <link rel="import" href="bower_components/px-alert-label/px-alert-label.html"/>
+    <link rel="import" href="bower_components/px-spinner/px-spinner.html"/>
+
+  <!-- SPELLS -->
+
+</head>
+
+<!-- define angular controller -->
+<body ng-controller = "login">
+
+<div ng-style = "overlay_style" class="overlay_div">
+  <div class="center_spinner">
+    <px-spinner size="100"></px-spinner>
+  </div>
+</div>
+
+<div class="center_div" >
+
+  <div>
+    <img src="images/redis.png" />
+  </div>
+
+  <form name="loginForm" ng-model = "loginForm" method="post">
+    <px-alert-label ng-style = "loginAlert" type="important" label="Failed to Log In!"></px-alert-label>
+    <label for="username"></label>
+      <input name="username" ng-keyup = "formValidation()" ng-model = "user.serv_instance_name" ng-required = "true" ng-class = "serv_instance_name_validation" id="username" placeholder="Redis Instance Name" class="text-input height-change" type="text" required/>
+
+    <label for="password"></label>
+
+    <input name="password" id="password" ng-keyup = "formValidation()" ng-required = "true" ng-class = "password_validation" ng-model = "user.password" placeholder="Password" class="text-input height-change" type="password" />
+
+    <label for="login"></label>
+    <div class="button_div">
+      <button ng-click = "formSubmit()" id="login" type="submit" style="margin: 0 auto;" class="btn btn--primary" >Sign In</button>
+    </div>
+
+  </form>
+</div>
+
+ <script src="bower_components/angular/angular.min.js"></script>
+    <script src="javascripts/login.js"></script>
+</body>
+
+</html>

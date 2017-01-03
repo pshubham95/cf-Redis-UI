@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<!-- define angular app -->
+<html ng-app="predix_redis">
+
+<head>
+  <!-- SCROLLS -->
+  <script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+  <link rel="import" href="bower_components/px-polymer-font-awesome/polymer-font-awesome.html" />
+
+  <link rel="stylesheet" href="stylesheets/style.css" />
+  <link rel="stylesheet" href="stylesheets/layout.css" />
+  <link rel="stylesheet" href="stylesheets/custom.css" />
+  <link rel="import" href="bower_components/px-theme/px-theme-styles.html">
+  <link rel="import" href="bower_components/px-app-nav/px-app-nav.html" />
+  <link rel="import" href="bower_components/px-table-view/px-table-view.html"/>
+  <link rel="import" href="bower_components/px-spinner/px-spinner.html"/>
+  <link rel="import" href="bower_components/px-modal/px-modal.html"/>
+  <link rel="import" href="bower_components/px-alert-label/px-alert-label.html"/>
+  <link rel="stylesheet" href="stylesheets/buttons.css" />
+  <link rel="import" href="bower_components/px-clipboard/px-clipboard.html"/>
+  <link rel="import" href="bower_components/px-dropdown/px-dropdown.html"/>
+  <link rel="import" href="bower_components/px-file-upload/px-file-upload.html"/>
+  <link rel="import" href="bower_components/px-alert-message/px-alert-message.html"/>
+  <style include="px-theme-styles" is="custom-style"></style>
+
+  <!-- SPELLS -->
+  <!--<script src="bower_components/angular/angular.min.js"></script>-->
+  <script src="javascripts/script.js"></script>
+</head>
+
+<!-- define angular controller -->
+<body id = "mainController" ng-controller="mainController">
+  <div ng-style = "overlay_style" style = "display: '';" class="overlay_div">
+    <div class="center_spinner">
+      <px-spinner size="100"></px-spinner>
+    </div>
+  </div>
+
+<header role="banner">
+  <div class="header_div">
+    <img class = "header_img" src="images/redis.png" />
+    <span class="header_span">Redis UI</span>
+</div>
+</header>
+
+<!--<div class="viewport" style="width:100%;height:100%;position:fixed;">
+
+    <span>
+      <px-app-nav class="navbar style-scope seed-app x-scope px-app-nav-0" nav-expanded = "true"
+      nav-items="{{navbarContents}}"></px-app-nav>
+
+
+    <main class="u-pt-- u-pr-- u-pl--" role="main">
+      <h1>Shubham</h1>
+    </main></span>
+</div>
+
+
+</div>-->
+<!--<div class="container">
+  <div class="clearfix"></div>
+  <div class="sidebar"><px-app-nav class="navbar style-scope seed-app x-scope px-app-nav-0 navbar--text-hidden navbar--collapsed" nav-expanded = "false"
+  nav-items="{{navbarContents}}"></px-app-nav></div>
+
+  <div class="content">
+    <h1>Shubham</h1>
+
+  </div>
+</div>-->
+
+<div>
+
+    <px-app-nav ng-click = "appNavHandler()" id = "appNav" class="navbar style-scope seed-app x-scope px-app-nav-0" nav-expanded = "true"
+    nav-items="{{navbarContents}}"></px-app-nav>
+
+    <div id="flex" style="flex:1;padding-left:20%;">
+      <px-modal
+        id="value_display"
+        btn-modal-negative="Back"
+        modal-heading="Key Value">
+
+
+        <px-clipboard data-clipboard-text="{{redisValue}}"></px-clipboard>
+        <px-alert-label ng-style = "alertEditStyle" style="padding-bottom:10px" type="Info" label="Data Saved!"></px-alert-label>
+
+        <p contenteditable = "{{editable}}" id="keyDisplay">
+          {{redisValue}}
+        </p>
+
+
+        <button type="button" ng-click = "editKeyValue();" class="btn btn--primary"><i class = "fa fa-pencil"></i> Edit</button>
+        <button type="button" ng-click = "refreshValue();" class="btn btn--primary"><i class="fa fa-refresh"></i> Refresh</button>
+        <button type="button" ng-click = "deleteKey();" class="btn btn--primary"><i class="fa fa-trash"></i> Delete Key</button>
+        <button type="button" ng-style = "saveEditKey" ng-click = "saveEditedValue()" class="btn btn--primary" id="saveButton"><i class="fa fa-floppy-o"></i> Save</button>
+      </px-modal>
+
+      <px-modal
+        id="import"
+        btn-modal-negative="Back"
+        modal-heading="Import Data">
+        <px-alert-label type="Info" id = "importAlert" label="Upload .redis file only"></px-alert-label>
+
+        <form action = "/importData" encType="multipart/form-data" method="post" id="fileinfo" name="fileinfo" onsubmit="return validateForm();" >
+          <px-file-upload message="Drag and drop files here, or click the button below." name="sampleFile" ></px-file-upload>
+
+          <button type="submit" class="btn btn--primary">Submit</button>
+        </form>
+      </px-modal>
+
+      <px-modal
+        id="export_data"
+        btn-modal-negative="Back"
+        modal-heading="Export Data" style = "min-width: 300px;">
+
+
+        <p style="min-width: 500px;">
+          <div ng-style = "exportDataFormStyle">
+          <span style="display: inline-block;padding-bottom: 10px;">
+            <px-alert-label ng-style = "exportDataFormAlertStyle" type="Important" label="Choose an export Option."></px-alert-label>
+            <px-alert-label ng-style = "exportDataFormWarningStyle" type="Warning" label="Json Files cannot be imported."></px-alert-label>
+
+          </span>
+
+
+          <px-dropdown ng-click = "warningDropdown()" display-value="Select"><px-dropdown-content extend-dropdown='true' extend-dropdown-by='25' max-cont-character-width='10' items='[{"key":"1","val":"Redis Commands"},{"key":"2","val":"JSON File"}]'></px-dropdown-content></px-dropdown>
+          <br/>
+
+          <button type="button" ng-click = "exportDataForm();" class="btn btn--primary">Export</button>
+          </div>
+          <div ng-style = "exportDataDisplayStyle">
+            
+              <px-clipboard style = "display: inherit;" data-clipboard-text="{{exportDisplayData}}"></px-clipboard>
+            
+            <textarea ng-bind = "exportDisplayData" id = "exportData" style="margin: 0px; padding-right: 50px;">
+            
+            </textarea>
+            <a href = "{{exportFileUrl}}" target = "_blank" type="button" class="btn btn--primary"><i class = "fa fa-download"></i> Download</a>
+
+          </div>
+        </p>
+      </px-modal>
+
+      <px-modal
+        id="new_key"
+        btn-modal-negative="Back"
+        modal-heading="Add New key">
+        <p>
+
+          <form name = "keyValue_form" ng-model = "keyValue_form" style="padding:10px; ">
+            <px-alert-label ng-style = "alertStyle" style="padding-bottom:10px" type="Info" label="Data Saved!"></px-alert-label>
+            <px-alert-label ng-style = "warningStyle" type="Warning" style="padding-bottom:10px;" label="Key name exists. Key value will be overwritten."></px-alert-label>
+
+            <input ng-keyup = "formValidation()" type="text" ng-model = "keyvalue.key" ng-class = "key_class" style = "margin-bottom:5px;margin-top:5px;" placeholder="Key" class="text-input" required />
+            <textarea ng-keyup = "formValidation()" type="text" ng-model = "keyvalue.value" ng-class = "value_class" style = "margin-bottom:5px;" placeholder="Value" class="text-input" required>
+            </textarea>
+            <button class="btn btn--primary" ng-click = "submitKeyValue()" style="margin-left:0px;" type="submit"><i class="fa fa-floppy-o"></i>Save</button>
+          </form>
+        </p>
+      </px-modal>
+      <px-alert-message ng-style = "dataImportStyle" type="more" message-title="Data Imported" auto-dismiss="6000" action="dismiss"></px-alert-message>
+
+      <h3 style="margin:0px;padding-bottom:20px;">Keys</h3>
+      <style is='custom-style'>:root { --px-table-row: { border-bottom: 1px solid gray; } }</style>
+      <!--<px-data-table table-data = "{{redisData}}" striped="true" filterable="true"></px-data-table>-->
+      <span style="padding-bottom: 10px;">
+      <button style="margin-top:10px;" ng-click = "openModalNewKey();" type="button" class="btn btn--primary">
+        <i class = "fa fa-plus"></i>
+        Add key
+      </button>
+       <button style="margin-top:10px;" ng-click = "openModalImport();" type="button" class="btn btn--primary">
+        <i class = "fa fa-upload"></i>
+        Import
+      </button>
+      <button ng-style = "exportStyle" style="margin-top:10px;" ng-click = "exportData();" type="button" class="btn btn--primary">
+        <i class="fa fa-download" aria-hidden="true"></i>
+        Export
+      </button>
+      <button style="margin-top:10px;" ng-click = "reloadKeys()" type="button" class="btn btn--primary">
+        <i class="fa fa-refresh" aria-hidden="true"></i>
+        Reload
+      </button>
+      </span>
+      <div style="width:70%; margin-top: 10px;">
+        <input type="text" ng-model="query" placeholder="Search" class="text-input"/>
+      </div>
+      <div ng-style = "noneStyle">
+
+        <p>
+          No Data in the DB.
+        </p>
+      </div>
+
+      <px-table-view ng-style = "noneStyleTable">
+        <px-table-row title="{{data.keys}}" tappable ng-click = "showKeys($index)" ng-repeat = "data in redisData | filter:query">
+
+        </px-table-row>
+      </px-table-view>
+      
+    </div>
+</div>
+
+
+</body>
+
+</html>

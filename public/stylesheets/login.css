@@ -1,0 +1,65 @@
+body
+{
+    background-color: #333333;
+    margin:0px;
+    padding:0px;
+    font-family: GE Inspira Sans,sans-serif;
+}
+
+.center_div{
+    position:fixed;
+    top: 50%;
+    left: 50%;
+    width:30em;
+    height:18em;
+    margin-top: -9em; /*set to a negative number 1/2 of your height*/
+    margin-left: -15em; /*set to a negative number 1/2 of your width*/
+
+}
+div.overlay_div {
+    opacity:0.9;
+    filter: alpha(opacity=20);
+    background-color:#000;
+    width:100%;
+    height:100%;
+    z-index:10;
+    top:0;
+    left:0;
+    position:fixed;
+    text-align: center;
+}
+.center_spinner
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+
+}
+.center_div form input
+{
+    padding: 1rem;
+}
+.center_div div
+{
+    text-align:center;
+}
+
+.center_div img
+{
+    width: 100px;
+    height: 100px;
+}
+.height-change
+{
+    height: 15px;
+}
+
+.button_div
+{
+    margin: 0 auto;
+    text-align:center;
+}

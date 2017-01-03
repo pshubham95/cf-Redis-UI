@@ -1,0 +1,198 @@
+<link rel="import" href="../polymer/polymer.html"/>
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../iron-selector/iron-selector.html">
+<link rel="import" href="../iron-selector/iron-multi-selectable.html">
+
+<link rel="import" href="css/px-table-view-styles.html">
+<link rel="import" href="css/px-table-row-styles.html">
+
+<link rel="import" href="px-table-row-action-button.html"/>
+<link rel="import" href="px-table-row.html"/>
+<link rel="import" href="px-table-view-sortable-list.html"/>
+
+<!--
+The `px-table-view` element provides a way to display list data.
+
+### Usage
+
+```
+<px-table-view>
+  <px-table-row title="Text Label"></px-table-row>
+  <px-table-row title="Tappable Item" tappable></px-table-row>
+</px-table-view>
+```
+
+### Styling
+
+Custom property | Description | Default
+------------ | ------------- | ------------
+`--px-table-view` | Style mixin to be applied to the component | {}
+`--px-table-row-selected` | Style mixin to be applied to the selected table row element | {}
+`--px-table-row-selected-color` | The selected row font color | {}
+`--px-table-row-selected-background-color` | The selected row background color | {}
+`--px-table-row-sortable-chosen-background-color` | (Sortable only) The background color for picked-up sortable rows | rgb(8,110,135)
+
+@element px-table-view.html
+@demo index.html
+@homepage index.html
+-->
+
+<dom-module id="px-table-view">
+
+  <style include="px-table-view-styles"></style>
+  <style media="screen">
+    :host {
+      display: block;
+      position: relative;
+    }
+
+    :host .table-view {
+      @apply(--px-table-view);
+      -webkit-overflow-scrolling: touch;
+    }
+  </style>
+  <template strip-whitespace>
+    <template is="dom-if" if="{{tableData}}">
+      <template id="tableRowTemplate" items="{{tableData}}" is="dom-repeat">
+        <px-table-row item="{{item}}"></px-table-row>
+      </template>
+    </template>
+    <div id="content" class="table-view">
+      <content id="tableViewContent" select="px-table-row, [content]"></content>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'px-table-view',
+
+      behaviors: [
+        Polymer.IronMultiSelectableBehavior,
+        Polymer.IronResizableBehavior,
+      ],
+
+      properties: {
+        /**
+         * An optional attribute that will build `px-table-row` children from a
+         * JSON data object. Expects an array of objects. Each object should contain
+         * keys that that correspond to `px-table-row` properties with defined values.
+         * For example: `'[{ "title": "Fixed Issue", "body": "Text body value", "icon": "fa:fa-exclamation-triangle"}]'`
+         *
+         * @property tableData
+         * @type {Array}
+         */
+        tableData: {
+          type: Array
+        },
+
+        /**
+         * Sets the size of the padding on `px-table-row` children. Can be 'flush', 'tiny', 'small', 'regular', 'large', 'huge'.
+         *
+         * @property rowsSize
+         * @type {String}
+         * @default 'regular'
+         */
+        rowsSize: {
+          type: String,
+          notify: true,
+          observer: '_handleRowsSize',
+          value: 'regular'
+        },
+
+        /**
+         * Makes all `px-table-row` children tappable, allowing user to click on
+         * each row and see feedback in the form of the row highlighting.
+         *
+         * @property rowsTappable
+         * @type {Boolean}
+         */
+        rowsTappable: {
+          type: Boolean,
+          observer: '_handleRowsTappable'
+        }
+      },
+
+     /**
+      * Returns an array with references to each `px-table-row` child.
+      *
+      * @return {Array} List of references to `px-table-row` children
+      */
+      getRows: function() {
+        if (this.$.tableViewContent) {
+          return Polymer.dom(this.$.tableViewContent).getDistributedNodes();
+        }
+      },
+
+      /**
+       * Handles updates to the `rowsSize` property by applying requested row style
+       * modifier classes to the `content` local DOM node.
+       *
+       * @private
+       * @method _handleRowsSize
+       * @param {String} newVal - The new value of `rowsSize`
+       * @param {String} oldVal - The previous value of `rowsSize`, if any
+       */
+      _handleRowsSize: function(newVal, oldVal) {
+        if (oldVal) this._ensureRemoveCSSClass('table-view--' + oldVal);
+        if (newVal) this._ensureHasCSSClass('table-view--' + newVal);
+      },
+
+      /**
+       * Handles updates to the `rowsTappable` property, setting the `tappable`
+       * attribute on each child `px-table-row`.
+       *
+       * @private
+       * @method _handleRowsTappable
+       * @param {String} newVal - The new value of `rowsTappable`
+       * @param {String} oldVal - The previous value of `rowsTappable`, if any
+       */
+      _handleRowsTappable: function(newVal, oldVal) {
+        this.debounce('changeTappableAttr', function() {
+          this._changeAttrEachRow('tappable', newVal);
+        }, 500);
+      },
+
+      /**
+       * Sets the requested attribute `attr` on each child `px-table-row` to
+       * `value`.
+       *
+       * @private
+       * @method _changeAttrEachRow
+       * @param {String} attr - The name of the attribute to set
+       * @param {Primitive} value - Any value of any type to set for the attribute
+       */
+      _changeAttrEachRow: function (attr, value) {
+        var rows = this.getRows();
+        if (Array.isArray(rows) && rows.length) {
+          rows.forEach(function(row) {
+            row.set(attr, null);
+            row.set(attr, value);
+          })
+        }
+      },
+
+      /**
+       * If the `content` local DOM node does not have the specific CSS class
+       * `klass`, this method adds that class.
+       *
+       * @private
+       * @method _ensureHasCSSClass
+       * @param {String} klass - The class to add if it doesn't already exist
+       */
+      _ensureHasCSSClass: function(klass) {
+        this.$.content.classList.add(klass);
+      },
+
+      /**
+       * If the `content` local DOM node has the specific CSS class `klass`, this
+       * method removes that class.
+       *
+       * @private
+       * @method _ensureRemoveCSSClass
+       * @param {String} klass - The class to remove if it already exist
+       */
+      _ensureRemoveCSSClass: function(klass) {
+        this.$.content.classList.remove(klass);
+      }
+    });
+  </script>
+</dom-module>

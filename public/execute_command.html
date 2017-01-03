@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<!-- define angular app -->
+<html ng-app="predix_redis">
+
+<head>
+  <!-- SCROLLS -->
+  <script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+  <link rel="stylesheet" href="stylesheets/style.css" />
+  <link rel="stylesheet" href="stylesheets/layout.css" />
+  <link rel="stylesheet" href="stylesheets/custom.css" />
+  <link rel="import" href="bower_components/px-theme/px-theme-styles.html">
+  <link rel="import" href="bower_components/px-polymer-font-awesome/polymer-font-awesome.html" />
+  <link rel="import" href="bower_components/px-app-nav/px-app-nav.html" />
+  <link rel="import" href="bower_components/px-spinner/px-spinner.html"/>
+  <link rel="stylesheet" href="bower_components/jquery.terminal/css/jquery.terminal.css">
+
+  <style include="px-theme-styles" is="custom-style"></style>
+
+  <!-- SPELLS -->
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/jquery-mousewheel/jquery.mousewheel.js"></script>
+  <script src="bower_components/jquery.terminal/js/jquery.terminal-min.js"></script>
+  <script src="bower_components/angular/angular.min.js"></script>
+  <script src="bower_components/angular-terminal/angular-terminal.js"></script>
+  <script src="javascripts/executeCommand.js"></script>
+</head>
+
+<!-- define angular controller -->
+<body id = "mainController" ng-controller="mainController">
+  <div ng-style = "overlay_style" class="overlay_div">
+    <div class="center_spinner">
+      <px-spinner size="100"></px-spinner>
+    </div>
+  </div>
+
+<header role="banner">
+  <div class="header_div">
+    <img class = "header_img" src="images/redis.png" />
+    <span class="header_span">Redis UI</span>
+</div>
+</header>
+
+<!--<div class="viewport" style="width:100%;height:100%;position:fixed;">
+
+    <span>
+      <px-app-nav class="navbar style-scope seed-app x-scope px-app-nav-0" nav-expanded = "true"
+      nav-items="{{navbarContents}}"></px-app-nav>
+
+
+    <main class="u-pt-- u-pr-- u-pl--" role="main">
+      <h1>Shubham</h1>
+    </main></span>
+</div>
+
+
+</div>-->
+<!--<div class="container">
+  <div class="clearfix"></div>
+  <div class="sidebar"><px-app-nav class="navbar style-scope seed-app x-scope px-app-nav-0 navbar--text-hidden navbar--collapsed" nav-expanded = "false"
+  nav-items="{{navbarContents}}"></px-app-nav></div>
+
+  <div class="content">
+    <h1>Shubham</h1>
+
+  </div>
+</div>-->
+
+<div>
+
+    <px-app-nav ng-click = "appNavHandler()" id = "appNav"  class="navbar style-scope seed-app x-scope px-app-nav-0" nav-expanded = "true"
+    nav-items="{{navbarContents}}"></px-app-nav>
+
+    <div id="flex"style="flex:1;padding-left:20%;">
+      <h3 style="margin:0px;padding-bottom:20px;padding-top: 5px;">Execute Redis Commands</h3>
+
+      <div style = "height: 70%; width: 75%; position: absolute; margin-top: 5px;" id = "term_demo" class="terminal-container" angular-terminal="main">
+      
+      </div>
+
+    </div>
+</div>
+
+
+</body>
+<script type="text/javascript">
+
+</script>
+</html>

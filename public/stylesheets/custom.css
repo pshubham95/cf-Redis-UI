@@ -1,0 +1,104 @@
+body {
+  margin: 0px;
+  height: 100%;
+}
+
+header{
+  background-color: #3B3B3F;
+}
+#keyDisplay
+{
+  border: 1px solid #eee;
+  min-width: 500px;
+  padding: 5px;
+}
+
+.header_div
+{
+  display: inline-block;
+}
+.header_img
+{
+  line-height: 50px;
+  width: 50px;
+  height: 50px;
+  padding-left: 10px;
+  padding-right: 10px;
+  letter-spacing: 1px;
+  vertical-align: middle;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-color: green;
+}
+.sidebar {
+  float: left;
+  width: 4%;
+  height: 100%;
+  background-color: yellow;
+  display: inline-block;
+}
+.content {
+  background-color: red;
+  height: 100%;
+  width: 96%;
+  margin-left: 200px;
+  padding-left: 20px;
+}
+.item {
+  width: 100%;
+  background-color: blue;
+  float: left;
+
+  color: white;
+}
+.clearfix {
+  clear: both;
+}
+.header_span
+{
+  line-height: 50px;
+  color: #d1d0d8;
+  font-size: 1.33333rem;
+  font-weight: 400;
+
+}
+div.overlay_div {
+    opacity:0.9;
+    filter: alpha(opacity=20);
+    background-color:#000;
+    width:100%;
+    height:100%;
+    z-index:1000;
+    top:0;
+    left:0;
+    position:fixed;
+    text-align: center;
+}
+.center_spinner
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+
+}
+header div img
+{
+
+}
+.navbar
+{
+  position: absolute;
+  margin: 0px;
+  height: inherit;
+}
+a {
+  color: #00B7FF;
+}
