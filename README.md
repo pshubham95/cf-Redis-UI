@@ -40,7 +40,7 @@ git clone https://github.build.ge.com/212576700/redis_ui.git
   set https_proxy=http://3.28.29.241:88
   set https_proxy=http://3.28.29.241:88
   ```
-  You can use proxy settings of your own choice if the above proxy settings don't work for you.
+  You can use proxy settings of your own choice if the above proxy settings doesn't work for you.
   
   * Create redis service instance on predix 
   ```
