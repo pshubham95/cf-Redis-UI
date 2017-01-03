@@ -1,7 +1,7 @@
 # redis_ui
 # README #
 
-Redis UI is a web-based administration tool for redis. It is compatible with predix and can be configured with a redis service instance on Predix.
+Redis UI is a web-based administration tool for redis. It is compatible with predix and can be configured with a redis service instance running on Predix.
 
 ### Contents ###
 
